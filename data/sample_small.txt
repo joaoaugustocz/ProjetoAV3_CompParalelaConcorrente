@@ -1,0 +1,7 @@
+Este arquivo pequeno descreve testes de paralelismo e desempenho.
+A palavra alvo aparece varias vezes neste texto para facilitar a contagem de paralelismo.
+Paralelismo em CPU e GPU e importante em ciencia de dados e jogos.
+Trabalhos academicos usam paralelismo para reduzir tempo de execucao.
+Paralelismo em sistemas embarcados tambem e relevante para dispositivos modernos.
+Este paragrafo repete paralelismo apenas para gerar contagens adicionais de paralelismo.
+Quando paralelismo e estudado com cuidado, a palavra paralelismo surge naturalmente.

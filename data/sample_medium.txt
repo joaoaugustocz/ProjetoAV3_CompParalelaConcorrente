@@ -1,0 +1,14 @@
+Este arquivo medio contem texto maior para avaliar o custo de paralelismo em diferentes ambientes.
+Os experimentos com paralelismo dependem da carga do processador e do acesso a memoria.
+Quando o paralelismo e bem estruturado, obtemos reducao de tempo e melhor uso de recursos.
+Em algumas situacoes, o paralelismo gera overhead e o ganho nao compensa o custo de coordenacao.
+Estudos sobre paralelismo em GPU mostram que algoritmos de busca podem se beneficiar de milhares de threads.
+No entanto, paralelismo em CPU continua sendo essencial em servidores e maquinas pessoais.
+Os testes repetem a palavra paralelismo em diferentes paragrafos para gerar contagens previsiveis.
+Ao combinar paralelismo, comunicacao e sincronizacao correta, a escalabilidade aumenta.
+Linhas adicionais reforcam a presenca da palavra paralelismo e criam um dataset mais robusto para a pesquisa.
+Paralelismo em sistemas distribuidos tambem influencia o desempenho de aplicacoes web e cientificas.
+Paralelismo aparece neste documento diversas vezes para tornar o benchmark coerente.
+Paralelismo, paralelismo e mais paralelismo: estes trechos foram escritos para testes de contagem de palavras.
+Quando o paralelismo e acompanhado de monitoramento, a confiabilidade dos resultados aumenta.
+Repetimos paralelismo no final para fechar a amostra de tamanho medio com a mesma palavra-chave: paralelismo.

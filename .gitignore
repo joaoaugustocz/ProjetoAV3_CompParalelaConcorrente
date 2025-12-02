@@ -1,0 +1,5 @@
+target/
+.idea/
+*.iml
+data/sample_huge.txt
+data/sample_mega.txt
