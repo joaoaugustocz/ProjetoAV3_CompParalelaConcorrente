@@ -60,17 +60,17 @@ Observacoes:
 
 ### Notas sobre GPU, overhead e variantes
 
-- **Overhead de transferencia domina em workloads leves**: Contar uma substring � uma tarefa compute-lev�ssima e limitada por banda de mem�ria. Para textos de poucas dezenas de MB, o tempo de copiar o buffer para a GPU e sincronizar o kernel pode superar o tempo de um scan na CPU (inclusive com threads).
-- **Atomics vs. redu��o local**: A variante `ParallelGPU` (b�sica) faz `atomic_add` global em cada match, criando conten��o quando h� muitas ocorr�ncias. As variantes `ParallelGPU Optimized` e `ParallelGPU Optimized (cached text)` usam redu��o em local memory, fazendo apenas um `atomic_add` por bloco para minimizar o custo.
-- **Texto em cache na GPU**: `ParallelGPU Optimized (cached text)` mant�m o buffer de texto residente na GPU e mede principalmente o tempo de kernel + leitura do contador, ignorando o upload do texto. Isso mostra o potencial computacional da GPU, mas n�o inclui o custo de I/O de carregar o buffer a cada execu��o.
-- **Por que a CPU ainda ganha em muitos cen�rios**:
-  - A opera��o � simples (comparar alguns bytes) e mem�ria-bound; CPUs com 4�16 threads saturam a RAM rapidamente.
-  - O custo de copiar 300�800 MB via PCIe + lat�ncia de lan�ar kernel � alto em rela��o ao trabalho por byte.
-  - Mesmo otimizando atomics, o limite passa a ser banda de mem�ria global; a GPU n�o fica "no limite" de FLOPs, e sim de mem�ria.
-- **Quando a GPU tende a vencer**:
-  - Workloads muito maiores (centenas de MB a GB) e/ou m�ltiplas execu��es sobre o mesmo buffer (reuso do texto na GPU).
-  - Operac��es mais pesadas por byte (ex.: hashing, normaliza��o complexa, pipelines com mais computa��o), nas quais o overhead de copia se dilui.
-  - Overlap de c�pia e execu��o (pinned memory + filas ass�ncronas) e kernels que processam mais bytes por thread para elevar o trabalho �til.
+- Overhead de transferencia domina em workloads leves: contar uma substring e compute-levissima e limitada por banda de memoria. Para textos de poucas dezenas de MB, o tempo de copiar o buffer para a GPU e sincronizar o kernel pode superar o tempo de um scan na CPU (inclusive com threads).
+- Atomics vs. reducao local: a variante `ParallelGPU` (basica) faz `atomic_add` global em cada match, criando contencao quando ha muitas ocorrencias. As variantes `ParallelGPU Optimized` e `ParallelGPU Optimized (cached text)` usam reducao em local memory, fazendo apenas um `atomic_add` por bloco para minimizar o custo.
+- Texto em cache na GPU: `ParallelGPU Optimized (cached text)` mantem o buffer de texto residente na GPU e mede principalmente o tempo de kernel + leitura do contador, ignorando o upload do texto. Isso mostra o potencial computacional da GPU, mas nao inclui o custo de I/O de carregar o buffer a cada execucao.
+- Por que a CPU ainda ganha em muitos cenarios:
+  - A operacao e simples (comparar alguns bytes) e memoria-bound; CPUs com 4-16 threads saturam a RAM rapidamente.
+  - O custo de copiar 300-800 MB via PCIe + latencia de lancar kernel e alto em relacao ao trabalho por byte.
+  - Mesmo otimizando atomics, o limite passa a ser banda de memoria global; a GPU nao fica "no limite" de FLOPs, e sim de memoria.
+- Quando a GPU tende a vencer:
+  - Workloads muito maiores (centenas de MB a GB) e/ou multiplas execucoes sobre o mesmo buffer (reuso do texto na GPU).
+  - Operacoes mais pesadas por byte (ex.: hashing, normalizacao complexa, pipelines com mais computacao), nas quais o overhead de copia se dilui.
+  - Overlap de copia e execucao (pinned memory + filas assincronas) e kernels que processam mais bytes por thread para elevar o trabalho util.
 
 ## Conclusao
 O exercicio mostra que paralelismo so compensa quando o volume de dados justifica o custo adicional. Em textos curtos, a versao serial e a paralela em CPU apresentam tempos semelhantes, enquanto a GPU sofre com overhead inicial. Para textos maiores ou pipelines que processam muitos arquivos, a GPU e mais threads de CPU tendem a reduzir o tempo total.
@@ -81,9 +81,9 @@ O exercicio mostra que paralelismo so compensa quando o volume de dados justific
 - XChart: https://knowm.org/open-source/xchart/
 
 ## Anexos - Codigos das implementacoes
-- Contadores: `src/main/java/com/parallel/wordcount/SerialCpuCounter.java`, `ParallelCpuCounter.java`, `ParallelGpuCounter.java`
+- Contadores: `src/main/java/com/parallel/wordcount/SerialCpuCounter.java`, `ParallelCpuCounter.java`, `ParallelGpuCounter.java`, `ParallelGpuOptimizedCounter.java`, `ParallelGpuOptimizedCachedCounter.java`
 - CLI/benchmark: `src/main/java/com/parallel/wordcount/BenchmarkRunner.java`
 - Interface grafica: `src/main/java/com/parallel/wordcount/ui/*`, script `run-gui.bat`
 - Utilitarios: `TextLoader.java`, `CsvExporter.java`, `ChartGenerator.java`
-- Amostras: `data/sample_small.txt`, `data/sample_medium.txt`, `data/sample_large.txt`
+- Amostras: `data/sample_small.txt`, `data/sample_medium.txt`, `data/sample_large.txt` (arquivos maiores devem ser gerados localmente: `sample_huge.txt`, `sample_mega.txt`)
 - Link do repositorio GitHub: https://github.com/joaoaugustocz/ProjetoAV3_CompParalelaConcorrente
